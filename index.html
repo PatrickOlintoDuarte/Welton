@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welton - Suporte de TI | Panda Fibra</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <img src="Wlton roxo.png" alt="Welton" class="avatar" id="avatarImg" onclick="openModal()">
+      <div class="chat-header-info">
+        <h2>Welton</h2>
+        <p><span class="online-indicator"></span>Suporte de TI - Panda Fibra</p>
+      </div>
+    </div>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close">&amp;</span>
+        <img class="modal-content" id="modalImg" src="Wlton roxo.png" alt="Welton">
+        <div class="info-text">Clique em qualquer lugar para fechar</div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer">
+      <div class="message assistant">
+        <div class="message-content">
+          <div>Olá! 👋 Sou o Welton, do Suporte TI da Panda Fibra. <br>
+          Em que posso te ajudar hoje? ⚙️</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-container">
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Descreva seu problema técnico..."
+          autocomplete="off"
+        />
+      </div>
+
+      <!-- ADICIONAR estas linhas no HTML -->
+      <input type="file" id="fileInput" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt,.csv" style="display: none;">
+
+
+      <div class="controls-wrapper">
+        <button id="attachBtn" class="attach-btn" title="Anexar arquivo">📎</button>
+        <button class="mic-btn" id="micBtn" title="Segure para gravar áudio">🎤</button>
+        <button class="send-btn" id="sendBtn">➤</button>
+      </div>
+
+      <div class="recording-hint" id="recordingHint">
+        Gravando... solte para enviar 🔴
+      </div>
+      
+    </div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

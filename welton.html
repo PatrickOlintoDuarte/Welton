@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welton - Suporte de TI | Panda Fibra</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body{
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #60a9fd, #0084ff, #00d4ff, #60a9fd);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      min-height:100vh; display:flex; justify-content:center; align-items:center; padding:20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        /* Modal para visualizar imagem */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            animation: zoom 0.3s;
+        }
+
+        @keyframes zoom {
+            from {transform: scale(0.5)}
+            to {transform: scale(1)}
+        }
+
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+        }
+
+        .info-text {
+            color: #fff;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+    /* Preserva quebras de linha nas mensagens do bot */
+.chat-messages,
+.message-content,
+.bot-message,
+.ai-response {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.6;
+}
+
+/* Se as mensagens estiverem dentro de um <p> ou <div> */
+.chat-messages p,
+.chat-messages div {
+  white-space: pre-wrap !important;
+  margin-bottom: 12px;
+}
+
+
+    /* Efeito de partículas flutuantes */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(255,255,255,.5), rgba(255,255,255,0)),
+        radial-gradient(2px 2px at 60px 70px, rgba(255,255,255,.5), rgba(255,255,255,0)),
+        radial-gradient(1px 1px at 50px 50px, rgba(255,255,255,.5), rgba(255,255,255,0)),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,.5), rgba(255,255,255,0)),
+        radial-gradient(2px 2px at 90px 10px, rgba(255,255,255,.5), rgba(255,255,255,0));
+      background-repeat: repeat;
+      background-size: 200px 200px;
+      animation: particleFloat 20s linear infinite;
+      pointer-events: none;
+      opacity: 0.3;
+      z-index: 1;
+    }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(0) translateX(0); }
+      50% { transform: translateY(-50px) translateX(30px); }
+      100% { transform: translateY(-100px) translateX(0); }
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .chat-container{
+      width:100%; max-width:900px; height:90vh; max-height:750px; background:#fff; border-radius:20px;
+      box-shadow:0 25px 80px rgba(0,0,0,.25), 0 0 60px rgba(0,132,255,.15); 
+      display:flex; flex-direction:column; overflow:hidden; animation:slideUp .5s ease;
+      position: relative;
+      z-index: 10;
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    /* Efeito de brilho ao redor do container */
+    .chat-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(0,132,255,.1) 0%, transparent 70%);
+      animation: glowPulse 4s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes glowPulse {
+      0%, 100% { transform: scale(1); opacity: 0.5; }
+      50% { transform: scale(1.1); opacity: 0.8; }
+    }
+
+    @keyframes slideUp{ 
+      from{opacity:0; transform:translateY(40px);} 
+      to{opacity:1; transform:translateY(0);} 
+    }
+
+    .chat-header{
+      background:linear-gradient(135deg,#0156b8 0%,#00aeff 100%); 
+      color:#fff; padding:28px 30px; display:flex; gap:16px; align-items:center;
+      border-bottom:none; box-shadow:0 4px 20px rgba(102,126,234,.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Efeito shimmer no header */
+    .chat-header::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.1), transparent);
+      animation: shimmer 3s infinite;
+      pointer-events: none;
+    }
+
+    @keyframes shimmer {
+      0% { left: -100%; }
+      100% { left: 100%; }
+    }
+
+    .chat-header-avatar{
+      width:56px; height:56px; background:rgba(255,255,255,.15); border-radius:50%; 
+      display:flex; align-items:center; justify-content:center;
+      font-size:28px; border:2px solid rgba(255,255,255,.3); backdrop-filter:blur(10px);
+      animation: floatAvatar 3s ease-in-out infinite;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes floatAvatar {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .chat-header-info h2{ 
+      font-size:18px; font-weight:700; margin:0; letter-spacing:-0.3px; 
+      position: relative;
+      z-index: 2;
+    }
+
+    .chat-header-info p{ 
+      font-size:13px; opacity:.85; margin:6px 0 0 0; font-weight:500; 
+      position: relative;
+      z-index: 2;
+    }
+
+    .online-indicator{ 
+      display:inline-block; width:10px; height:10px; background:#10b981; 
+      border-radius:50%; animation:pulse 2s infinite; margin-right:6px; 
+      box-shadow:0 0 8px rgba(16,185,129,.5), 0 0 12px rgba(16,185,129,.3); 
+    }
+
+    @keyframes pulse{ 
+      0%,100%{opacity:1; transform: scale(1);} 
+      50%{opacity:.6; transform: scale(1.2);} 
+    }
+
+    .messages-container{ 
+      flex:1; overflow-y:auto; padding:30px; display:flex; flex-direction:column; 
+      gap:16px; background:linear-gradient(to bottom, #f8f9fc 0%, #f5f7ff 100%); 
+      position: relative;
+    }
+
+    .message{ 
+      display:flex; gap:12px; animation:messageIn .35s ease; 
+    }
+
+    @keyframes messageIn{ 
+      from{opacity:0; transform:translateY(12px) scale(0.95);} 
+      to{opacity:1; transform:translateY(0) scale(1);} 
+    }
+
+    .message.user{ justify-content:flex-end; }
+
+    .message-content{
+      max-width:65%; padding:14px 18px; border-radius:16px; word-wrap:break-word; 
+      font-size:14px; line-height:1.6;
+      display:flex; flex-direction:column; gap:10px; 
+      box-shadow:10px 4px 8px rgba(0,0,0,.14);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .message-content:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,.12);
+      transform: translateY(-2px);
+    }
+
+    .message.assistant .message-content{
+      background:#fff; color:#333; border-radius:16px 16px 16px 4px; 
+      border-left:3px solid #0084ff;
+      background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+    }
+
+    .message.user .message-content{
+      background:linear-gradient(135deg,#009ee7 0%,#04348b 100%); 
+      color:#fff; border-radius:16px 16px 4px 16px; 
+      box-shadow:0 4px 15px rgba(0,132,255,.25), 0 0 20px rgba(0,132,255,.1);
+    }
+
+    .message.system .message-content{
+      background:#fef3c7; color:#92400e; border-radius:12px; text-align:center; 
+      font-size:13px; margin:0 auto; border-left:3px solid #fbbf24;
+    }
+
+    .typing-indicator{ 
+      display:flex; gap:6px; padding:14px 18px; background:#fff; 
+      border-radius:16px; width:fit-content; border-left:3px solid #0084ff; 
+      box-shadow:0 2px 8px rgba(0,0,0,.08);
+      background: linear-gradient(135deg, #fff 0%, #f8f9ff 100%);
+    }
+
+    .typing-dot{ 
+      width:10px; height:10px; background:#0084ff; border-radius:50%; 
+      animation:typing 1.4s infinite;
+      box-shadow: 0 0 8px rgba(0,132,255,.4);
+    }
+
+    .typing-dot:nth-child(2){ animation-delay:.2s; }
+    .typing-dot:nth-child(3){ animation-delay:.4s; }
+
+    @keyframes typing{ 
+      0%,60%,100%{ transform:translateY(0); opacity:.5;} 
+      30%{ transform:translateY(-12px); opacity:1;} 
+    }
+
+    .chat-input-container{
+      padding:24px 30px; border-top:1px solid #e8eaf6; background:#fff; 
+      display:flex; gap:12px; align-items:flex-end;
+      flex-wrap:wrap; box-shadow:0 -4px 20px rgba(0,0,0,.03);
+      position: relative;
+    }
+
+    .input-wrapper{
+      flex:1; display:flex; gap:10px; align-items:center; background:#f8f9fc; 
+      border-radius:28px; padding:12px 20px;
+      border:2px solid #e8eaf6; transition:all .3s ease; min-width:200px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .input-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.4), transparent);
+      transition: left 0.5s;
+    }
+
+    .input-wrapper:focus-within::before {
+      left: 100%;
+    }
+
+    .input-wrapper:focus-within{ 
+      border-color:#0084ff; background:#f0f3ff; 
+      box-shadow:0 0 0 3px rgba(0,132,255,.1), 0 0 15px rgba(0,132,255,.1);
+    }
+
+    .input-wrapper input{
+      flex:1; border:none; background:transparent; font-size:14px; outline:none;
+      font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      z-index: 2;
+    }
+
+    .input-wrapper input::placeholder{ color:#999; font-weight:500; }
+
+    .controls-wrapper{
+      display:flex; gap:10px; align-items:center;
+    }
+
+    .send-btn,
+    .mic-btn{
+      background:linear-gradient(135deg,#0360ac 0%,#0887ff 100%);
+      color:#fff; border:none; width:44px; height:44px; border-radius:50%;
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-size:20px; transition:all .3s ease; flex-shrink:0; 
+      box-shadow:0 4px 15px rgba(0,132,255,.3), 0 0 20px rgba(0,132,255,.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .send-btn::before,
+    .mic-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .send-btn:active::before,
+    .mic-btn:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .send-btn:hover,
+    .mic-btn:hover{
+      transform:translateY(-3px); 
+      box-shadow:0 6px 20px rgba(0,132,255,.4), 0 0 30px rgba(0,132,255,.2);
+    }
+
+    .send-btn:active,
+    .mic-btn:active{
+      transform:translateY(-1px);
+    }
+
+    .send-btn:disabled,
+    .mic-btn:disabled{
+      opacity:.5; cursor:not-allowed;
+    }
+
+    .mic-btn.recording{
+      background:linear-gradient(135deg,#dc2626 0%,#b91c1c 100%);
+      box-shadow:0 0 20px rgba(220,38,38,.6), 0 0 40px rgba(220,38,38,.3);
+      animation:recordPulse 1s infinite;
+    }
+
+    @keyframes recordPulse{
+      0%,100%{ 
+        box-shadow:0 0 15px rgba(220,38,38,.4), 0 0 30px rgba(220,38,38,.2); 
+        transform: scale(1);
+      }
+      50%{ 
+        box-shadow:0 0 25px rgba(220,38,38,.8), 0 0 50px rgba(220,38,38,.4); 
+        transform: scale(1.05);
+      }
+    }
+
+    .recording-hint{
+      font-size:12px;
+      color:#dc2626;
+      font-weight:600;
+      display:none;
+      width:100%;
+      text-align:center;
+      animation: fadeInOut 1s infinite;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .recording-hint.active{
+      display:block;
+    }
+
+    .messages-container::-webkit-scrollbar{ width:8px; }
+    .messages-container::-webkit-scrollbar-track{ background:transparent; }
+    .messages-container::-webkit-scrollbar-thumb{ 
+      background:linear-gradient(to bottom, #0084ff, #00d4ff);
+      border-radius:4px; 
+    }
+    .messages-container::-webkit-scrollbar-thumb:hover{ 
+      background:linear-gradient(to bottom, #0056b3, #0099cc);
+    }
+
+    @media (max-width:900px){
+      .chat-container{ max-width:95%; max-height:85vh; }
+      .message-content{ max-width:75%; }
+    }
+
+    @media (max-width:600px){
+      .chat-container{ max-height:100%; border-radius:0; }
+      .message-content{ max-width:85%; }
+      .chat-input-container{ flex-direction:column; align-items:stretch; padding:18px 20px; }
+      .controls-wrapper{ align-self:flex-end; }
+      .chat-header{ padding:20px; }
+      .messages-container{ padding:20px; }
+      .input-wrapper{ border-radius:24px; padding:10px 16px; }
+    }
+
+    .error-message{
+      color:#dc2626; font-size:12px; padding:10px 14px; background:#fee2e2; 
+      border-radius:10px; margin-top:6px; border-left:3px solid #dc2626;
+    }
+
+    .quick-actions{ display:flex; gap:8px; margin-top:10px; flex-wrap:wrap; }
+
+    .action-btn{
+      background:#f0f3ff; border:1.5px solid #e0e7ff; padding:8px 12px; 
+      border-radius:8px; font-size:12px; cursor:pointer; transition:all .2s ease; 
+      color:#0084ff; font-weight:600;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .action-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0,132,255,.2), transparent);
+      transition: left 0.5s;
+    }
+
+    .action-btn:hover::before {
+      left: 100%;
+    }
+
+    .action-btn:hover{ 
+      background:#e0e7ff; border-color:#0084ff; transform:translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0,132,255,.2);
+    }
+
+    /* ===== ÁUDIO CUSTOMIZADO - ESTILO WHATSAPP ===== */
+    .audio-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .audio-label {
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0.75;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .message.user .audio-label {
+      color: rgba(255,255,255,.8);
+    }
+
+    .message.assistant .audio-label {
+      color: #0084ff;
+    }
+
+    /* Container do player customizado */
+    .audio-player-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(0,0,0,.05);
+      border-radius: 20px;
+      padding: 8px 12px;
+      width: fit-content;
+      max-width: 280px;
+      transition: all 0.3s ease;
+    }
+
+    .message.user .audio-player-container {
+      background: rgba(255,255,255,.15);
+    }
+
+    .message.assistant .audio-player-container {
+      background: rgba(0,132,255,.08);
+    }
+
+    .audio-player-container:hover {
+      background: rgba(0,0,0,.08);
+      transform: scale(1.02);
+    }
+
+    .message.user .audio-player-container:hover {
+      background: rgba(255,255,255,.2);
+    }
+
+    /* Botão Play/Pause */
+    .audio-play-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0084ff, #00d4ff);
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 8px rgba(0,132,255,.2);
+    }
+
+    .message.user .audio-play-btn {
+      background: rgba(255,255,255,.3);
+    }
+
+    .audio-play-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 4px 12px rgba(0,132,255,.3);
+    }
+
+    .audio-play-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Barra de progresso */
+    .audio-progress-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .audio-progress-bar {
+      width: 100%;
+      height: 3px;
+      background: rgba(0,0,0,.1);
+      border-radius: 2px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .message.user .audio-progress-bar {
+      background: rgba(255,255,255,.2);
+    }
+
+    .message.assistant .audio-progress-bar {
+      background: rgba(0,132,255,.15);
+    }
+
+    .audio-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0084ff, #00d4ff);
+      border-radius: 2px;
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+
+    .message.user .audio-progress-fill {
+      background: rgba(255,255,255,.8);
+    }
+
+    /* Tempo */
+    .audio-time {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.7;
+      min-width: 35px;
+      text-align: right;
+    }
+
+    .message.user .audio-time {
+      color: rgba(255,255,255,.9);
+    }
+
+    .message.assistant .audio-time {
+      color: #0084ff;
+    }
+
+    /* Input hidden */
+    .audio-player-hidden {
+      display: none;
+    }
+  </style>
+
+
+</head>
+<body>
+  <div class="chat-container">
+    <div class="chat-header">
+      <img src="Wlton roxo.png" alt="Welton" class="avatar" id="avatarImg" onclick="openModal()">
+      <div class="chat-header-info">
+        <h2>Welton</h2>
+        <p><span class="online-indicator"></span>Suporte de TI - Panda Fibra</p>
+      </div>
+    </div>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close">&amp;</span>
+        <img class="modal-content" id="modalImg" src="Wlton roxo.png" alt="Welton">
+        <div class="info-text">Clique em qualquer lugar para fechar</div>
+    </div>
+
+    <div class="messages-container" id="messagesContainer">
+      <div class="message assistant">
+        <div class="message-content">
+          <div>Olá! 👋 Sou o Welton, do Suporte TI da Panda Fibra. <br>
+          Em que posso te ajudar hoje? ⚙️</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-container">
+      <div class="input-wrapper">
+        <input
+          type="text"
+          id="messageInput"
+          placeholder="Descreva seu problema técnico..."
+          autocomplete="off"
+        />
+      </div>
+
+      <div class="controls-wrapper">
+        <button class="mic-btn" id="micBtn" title="Segure para gravar áudio">🎤</button>
+        <button class="send-btn" id="sendBtn">➤</button>
+      </div>
+
+      <div class="recording-hint" id="recordingHint">
+        Gravando... solte para enviar 🔴
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========================================
+    // CHAT ELTON - Suporte de TI (n8n)
+    // + Suporte a Áudio
+    // ========================================
+
+    function openModal() {
+            document.getElementById('imageModal').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        // Fechar com tecla ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+    const config = {
+      N8N_WEBHOOK_URL: 'https://flow.grupopanda.net.br/webhook/elton',
+      RETRY_ATTEMPTS: 3,
+      RETRY_DELAY: 1000
+    };
+
+    const SESSION_KEY = 'elton_ti_session_id';
+    if (!localStorage.getItem(SESSION_KEY)) {
+      localStorage.setItem(
+        SESSION_KEY,
+        'sess-' + Math.random().toString(36).slice(2) + Date.now()
+      );
+    }
+    const sessionId = localStorage.getItem(SESSION_KEY);
+
+    class ChatElton {
+      constructor() {
+        this.messagesContainer = document.getElementById('messagesContainer');
+        this.messageInput = document.getElementById('messageInput');
+        this.sendBtn = document.getElementById('sendBtn');
+        this.micBtn = document.getElementById('micBtn');
+        this.recordingHint = document.getElementById('recordingHint');
+
+        this.conversationHistory = [];
+        this.isWaitingResponse = false;
+
+        // Áudio / gravação
+        this.mediaRecorder = null;
+        this.audioChunks = [];
+        this.isRecording = false;
+
+        this.init();
+      }
+
+      init() {
+        console.log('💻 Inicializando Chat Elton (Suporte TI)...');
+        console.log('Sessão:', sessionId);
+        this.attachEventListeners();
+        this.loadConversationHistory();
+      }
+
+
+      attachEventListeners() {
+        // Enviar texto com botão
+        this.sendBtn.addEventListener('click', () => this.sendMessage());
+
+        // Enviar texto com Enter
+        this.messageInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            this.sendMessage();
+          }
+        });
+
+        // Habilita/desabilita botão de enviar texto
+        this.messageInput.addEventListener('input', () => {
+          this.sendBtn.disabled = this.messageInput.value.trim() === '';
+        });
+
+        // Botão de áudio (push-to-talk style: segurar para gravar)
+        // mobile: touchstart/touchend
+        this.micBtn.addEventListener('mousedown', () => this.startRecording());
+        this.micBtn.addEventListener('touchstart', (e) => {
+          e.preventDefault();
+          this.startRecording();
+        });
+
+        document.addEventListener('mouseup', () => {
+          if (this.isRecording) this.stopRecordingAndSend();
+        });
+        document.addEventListener('touchend', (e) => {
+          if (this.isRecording) {
+            e.preventDefault();
+            this.stopRecordingAndSend();
+          }
+        });
+      }
+
+      // ============================
+      // TEXTO
+      // ============================
+      sendMessage() {
+        const message = this.messageInput.value.trim();
+        if (!message || this.isWaitingResponse) return;
+
+        // adiciona na tela e histórico
+        this.addMessage('user', { text: message });
+        this.conversationHistory.push({ role: 'user', content: message });
+        this.saveConversationHistory();
+
+        // limpa input
+        this.messageInput.value = '';
+        this.sendBtn.disabled = true;
+
+        // indicador "digitando"
+        this.showTypingIndicator();
+
+        // envia pro n8n
+        this.sendToN8N(message);
+      }
+
+      async sendToN8N(userMessage) {
+        this.isWaitingResponse = true;
+
+        try {
+          const response = await fetch(config.N8N_WEBHOOK_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              'User-Agent': 'PandaFibra-ChatSuporteElton/1.0'
+            },
+            body: JSON.stringify({
+              agent: 'elton-ti',
+              type: 'support_message',
+              message: userMessage,
+              history: this.conversationHistory,
+              sessionId,
+              name: 'Colaborador ou Cliente',
+              timestamp: new Date().toISOString(),
+              inputFormat: 'text'
+            })
+          });
+
+          if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+          const data = await response.json();
+
+          this.removeTypingIndicator();
+
+          // tentamos mapear possíveis campos de resposta
+          const aiText =
+            data.responseText ||
+            data.response ||
+            data.message ||
+            'Desculpe, houve um problema técnico ao processar sua mensagem.';
+          const aiAudioUrl = data.responseAudioUrl || data.audioUrl || null;
+
+          // render assistant (suporta texto e/ou áudio)
+          this.addMessage('assistant', {
+            text: aiText,
+            audioUrl: aiAudioUrl
+          });
+
+          // histórico: salvamos o texto. Se tiver áudio, marcamos.
+          let historyContent = aiText;
+          if (aiAudioUrl) {
+            historyContent += ` [AUDIO RECEBIDO: ${aiAudioUrl}]`;
+          }
+          this.conversationHistory.push({ role: 'assistant', content: historyContent });
+          this.saveConversationHistory();
+
+        } catch (error) {
+          console.error('❌ Erro ao enviar mensagem:', error);
+          this.removeTypingIndicator();
+          this.addMessage('system', { text: `⚠️ Erro: ${error.message}` });
+        } finally {
+          this.isWaitingResponse = false;
+          this.messageInput.focus();
+        }
+      }
+
+      // ============================
+      // ÁUDIO - captura e envio
+      // ============================
+
+      async startRecording() {
+        if (this.isWaitingResponse || this.isRecording) return;
+
+        // pede permissão microfone
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          this.audioChunks = [];
+          this.mediaRecorder = new MediaRecorder(stream);
+
+          // quando chegar dados de áudio, guarda
+          this.mediaRecorder.addEventListener('dataavailable', (event) => {
+            if (event.data.size > 0) {
+              this.audioChunks.push(event.data);
+            }
+          });
+
+          // muda UI pra "gravando"
+          this.isRecording = true;
+          this.micBtn.classList.add('recording');
+          this.recordingHint.classList.add('active');
+
+          this.mediaRecorder.start();
+          console.log('🎙️ Gravando áudio...');
+        } catch (err) {
+          console.error('🚫 Não conseguiu acessar microfone:', err);
+          this.addMessage('system', {
+            text: '⚠️ Não consegui acessar o microfone. Verifique as permissões.'
+          });
+        }
+      }
+
+      async stopRecordingAndSend() {
+        if (!this.isRecording) return;
+        this.isRecording = false;
+
+        // volta UI ao normal
+        this.micBtn.classList.remove('recording');
+        this.recordingHint.classList.remove('active');
+
+        if (!this.mediaRecorder) return;
+
+        // para a gravação, espera finalizar, monta blob e envia
+        this.mediaRecorder.addEventListener('stop', async () => {
+          const audioBlob = new Blob(this.audioChunks, { type: 'audio/webm' });
+          const audioUrlLocal = URL.createObjectURL(audioBlob);
+
+          // mostra na tela a bolha do usuário com player
+          this.addMessage('user', {
+            text: '[Áudio enviado]',
+            audioUrl: audioUrlLocal
+          });
+
+          // guarda no histórico texto simbólico
+          this.conversationHistory.push({
+            role: 'user',
+            content: '[AUDIO ENVIADO]'
+          });
+          this.saveConversationHistory();
+
+          // mostra "digitando"
+          this.showTypingIndicator();
+
+          // envia de fato pro n8n
+          await this.sendAudioToN8N(audioBlob);
+
+          // libera stream tracks
+          if (this.mediaRecorder.stream) {
+            this.mediaRecorder.stream.getTracks().forEach(t => t.stop());
+          }
+          this.mediaRecorder = null;
+          this.audioChunks = [];
+        });
+
+        this.mediaRecorder.stop();
+      }
+
+async sendAudioToN8N(audioBlob) {
+  this.isWaitingResponse = true;
+
+  try {
+    const formData = new FormData();
+    formData.append('agent', 'elton-ti');
+    formData.append('type', 'support_message');
+    formData.append('sessionId', sessionId);
+    formData.append('name', 'Colaborador ou Cliente');
+    formData.append('timestamp', new Date().toISOString());
+    formData.append('history', JSON.stringify(this.conversationHistory));
+    formData.append('inputFormat', 'audio');
+    formData.append('audio', audioBlob, 'gravacao.webm');
+
+    const response = await fetch(config.N8N_WEBHOOK_URL, {
+      method: 'POST',
+      mode: 'cors',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+    }
+
+    // 👇 NOVO: vamos olhar qual o Content-Type que voltou
+    const contentType = response.headers.get('Content-Type') || '';
+
+    if (contentType.includes('application/json')) {
+      // Caminho antigo: resposta em JSON
+      const data = await response.json();
+
+      this.removeTypingIndicator();
+
+      const aiText =
+        data.responseText ||
+        data.response ||
+        data.message ||
+        'Recebi seu áudio e estou processando sua solicitação. ✅';
+
+      const aiAudioUrl = data.responseAudioUrl || data.audioUrl || null;
+
+      this.addMessage('assistant', {
+        text: aiText,
+        audioUrl: aiAudioUrl
+      });
+
+      // histórico
+      let historyContent = aiText;
+      if (aiAudioUrl) {
+        historyContent += ` [AUDIO RECEBIDO: ${aiAudioUrl}]`;
+      }
+      this.conversationHistory.push({ role: 'assistant', content: historyContent });
+      this.saveConversationHistory();
+
+    } else if (contentType.includes('audio/')) {
+      // 👇 NOVO: resposta é áudio bruto (mp3, wav etc)
+      const audioBlobResponse = await response.blob();
+      const localUrl = URL.createObjectURL(audioBlobResponse);
+
+      this.removeTypingIndicator();
+
+      // mostramos bolha com player
+      this.addMessage('assistant', {
+        text: 'Enviei a resposta em áudio 🎧',
+        audioUrl: localUrl
+      });
+
+      // salva no histórico que veio áudio
+      this.conversationHistory.push({
+        role: 'assistant',
+        content: '[AUDIO GERADO PELO SUPORTE]'
+      });
+      this.saveConversationHistory();
+
+    } else {
+      // fallback inesperado
+      const textResp = await response.text();
+      throw new Error('Resposta inesperada do servidor: ' + textResp.slice(0, 100));
+    }
+
+  } catch (error) {
+    console.error('❌ Erro ao enviar áudio:', error);
+    this.removeTypingIndicator();
+    this.addMessage('system', { text: `⚠️ Erro no envio de áudio: ${error.message}` });
+  } finally {
+    this.isWaitingResponse = false;
+    this.messageInput.focus();
+  }
+}
+
+
+
+
+      // ============================
+      // Renderização de mensagens
+      // ============================
+      addMessage(role, { text = '', audioUrl = null } = {}) {
+        const messageEl = document.createElement('div');
+        messageEl.className = `message ${role}`;
+
+        const contentEl = document.createElement('div');
+        contentEl.className = 'message-content';
+
+        // Texto (se tiver)
+        if (text && text.trim() !== '') {
+          const textEl = document.createElement('div');
+          textEl.textContent = text;
+          contentEl.appendChild(textEl);
+        }
+
+        // Player de áudio (se tiver)
+        if (audioUrl) {
+          const audioWrapper = document.createElement('div');
+          audioWrapper.style.display = 'flex';
+          audioWrapper.style.flexDirection = 'column';
+          audioWrapper.style.gap = '4px';
+
+          const smallLabel = document.createElement('div');
+          smallLabel.className = 'audio-label';
+          smallLabel.textContent = role === 'user' ? '[Seu áudio]' : '[Áudio do suporte]';
+
+          const audioPlayer = document.createElement('audio');
+          audioPlayer.className = 'audio-player';
+          audioPlayer.controls = true;
+          audioPlayer.src = audioUrl;
+
+          audioWrapper.appendChild(smallLabel);
+          audioWrapper.appendChild(audioPlayer);
+
+          contentEl.appendChild(audioWrapper);
+        }
+
+        messageEl.appendChild(contentEl);
+        this.messagesContainer.appendChild(messageEl);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+      }
+
+      showTypingIndicator() {
+        const messageEl = document.createElement('div');
+        messageEl.className = 'message assistant';
+        messageEl.id = 'typingIndicator';
+
+        const indicatorEl = document.createElement('div');
+        indicatorEl.className = 'typing-indicator';
+        indicatorEl.innerHTML = '<div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div>';
+
+        messageEl.appendChild(indicatorEl);
+        this.messagesContainer.appendChild(messageEl);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+      }
+
+      removeTypingIndicator() {
+        const typing = document.getElementById('typingIndicator');
+        if (typing) typing.remove();
+      }
+
+      // ============================
+      // Histórico local
+      // ============================
+      saveConversationHistory() {
+        try {
+          localStorage.setItem(
+            'elton_ti_chat_history',
+            JSON.stringify(this.conversationHistory)
+          );
+        } catch {
+          console.log('Não foi possível salvar histórico');
+        }
+      }
+
+      loadConversationHistory() {
+        try {
+          const saved = localStorage.getItem('elton_ti_chat_history');
+          if (saved) {
+            this.conversationHistory = JSON.parse(saved);
+            console.log(
+              '✅ Histórico carregado:',
+              this.conversationHistory.length,
+              'mensagens'
+            );
+          }
+        } catch {
+          console.log('Não foi possível carregar histórico');
+        }
+      }
+    }
+
+    const chat = new ChatElton();
+    console.log('✅ Chat Elton Suporte TI carregado com suporte a Áudio!');
+  </script>
+</body>
+</html>
