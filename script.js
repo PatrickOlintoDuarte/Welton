@@ -16,7 +16,7 @@ document.addEventListener('keydown', function (event) {
 
 // ===== CONFIG E SESSÃO =====
 const config = {
-  N8N_WEBHOOK_URL: 'https://flow.grupopanda.net.br/webhook/elton',
+  N8N_WEBHOOK_URL: 'https://flow.grupopanda.net.br/webhook-test/elton',
   RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 1000
 };
@@ -610,4 +610,5 @@ class ChatElton {
 // Inicializa
 const chat = new ChatElton();
 console.log('✅ Chat Elton Suporte TI carregado com suporte a Áudio e Anexos (compositor)!');
+
 
